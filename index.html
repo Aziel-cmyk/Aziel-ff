@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AZIEL FF PRO</title><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#ff0000">
+<style>
+body{background:#0a0a0a;color:#fff;font-family:sans-serif;margin:0;padding:20px;text-align:center}
+h1{color:red}
+.card{background:#1a1a1a;border:1px solid red;border-radius:16px;padding:20px;margin:16px auto;max-width:420px}
+select,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:none;font-size:16px}
+select{background:#222;color:#fff}
+button{background:red;color:#fff;font-weight:bold}
+.wa{background:#25d366}
+.v{color:#ff3b3b;font-size:22px;font-weight:bold}
+</style></head><body>
+<h1>🔴 AZIEL FF PRO</h1>
+<div class="card">
+<select id="cel"></select>
+<select id="arma"></select>
+<div id="out"></div>
+<button onclick="copiar()">📋 COPIAR SENSIBILIDAD</button>
+<button class="wa" onclick="wa()">💬 ENVIAR POR WHATSAPP</button>
+<div id="msg"></div>
+</div>
+<script>
+const T={b:[190,185,180,175,100,120],m:[195,190,185,180,100,125],a:[200,195,190,185,100,130]};
+const cels={"Samsung A03":"b","Samsung A04":"b","Samsung A05":"b","Samsung A06":"b","Samsung A13":"b","Samsung A14":"b","Samsung A15":"m","Samsung A24":"m","Samsung A25":"m","Samsung A34":"m","Samsung A35":"m","Samsung A54":"a","Samsung A55":"a","Samsung S21":"a","Samsung S22":"a","Samsung S23":"a","Samsung S24":"a","Xiaomi Redmi 9A":"b","Xiaomi Redmi 10":"b","Xiaomi Redmi 12":"m","Xiaomi Redmi Note 11":"m","Xiaomi Redmi Note 12":"m","Xiaomi Redmi Note 13":"a","Xiaomi Poco X5":"m","Xiaomi Poco X6":"a","Xiaomi Poco F5":"a","Motorola G14":"b","Motorola G24":"b","Motorola G54":"m","Motorola G84":"m","Motorola Edge 40":"a","Infinix Hot 30":"b","Infinix Hot 40":"m","Infinix Note 30":"m","Tecno Spark 10":"b","Tecno Spark 20":"m","Tecno Camon 20":"m","Realme C55":"b","Realme 11":"m","Realme GT":"a","Oppo A17":"b","Oppo A58":"m","Oppo Reno 10":"a","Vivo Y17":"b","Vivo Y36":"m","Vivo V29":"a","Huawei Y9":"b","ZTE Blade A36":"b","ZTE Blade A54":"b","ZTE Blade V50":"m","Honor X6":"b","Honor X8":"m","Honor 90":"a","iPhone 8":"m","iPhone XR":"m","iPhone 11":"a","iPhone 12":"a","iPhone 13":"a","iPhone 14":"a","iPhone 15":"a","Otro gama baja":"b","Otro gama media":"m","Otro gama alta":"a"};
+const armas={"AK47":0,"M4A1":0,"SCAR":0,"M14":-3,"Groza":2,"FAMAS":2,"AN94":0,"XM8":0,"Woodpecker":-3,"MP40":5,"UMP":5,"Thompson":5,"MP5":5,"P90":6,"Vector":6,"CG15":4,"M1887":-5,"M1014":-5,"SPAS12":-5,"Charge Buster":-5,"Trogon":-5,"AWM":-10,"Kar98k":-10,"M82B":-12,"SVD":-8,"Desert Eagle":-2,"G18":3,"M1873":-2,"M60":-4,"MG3":-4};
+const nom=["General","Punto rojo","Mira 2X","Mira 4X","Francotirador","Cámara libre"];
+const c=document.getElementById("cel"),a=document.getElementById("arma"),out=document.getElementById("out"),msg=document.getElementById("msg");
+Object.keys(cels).forEach(k=>c.add(new Option(k)));
+Object.keys(armas).forEach(k=>a.add(new Option(k)));
+try{const g=localStorage.getItem("aziel");if(g){const p=JSON.parse(g);if(cels[p.c])c.value=p.c;if(armas[p.a]!==undefined)a.value=p.a;}}catch(e){}
+function datos(){const b=T[cels[c.value]],o=armas[a.value];return nom.map((n,i)=>[n,Math.min(200,b[i]+(i<4?o:0))]);}
+function texto(){return c.value+" - "+a.value+"\n"+datos().map(d=>d[0]+": "+d[1]).join("\n");}
+function pintar(){out.innerHTML=datos().map(d=>d[0]+': <span class="v">'+d[1]+'</span><br>').join("");try{localStorage.setItem("aziel",JSON.stringify({c:c.value,a:a.value}));}catch(e){}}
+function copiar(){navigator.clipboard.writeText(texto()).then(()=>msg.textContent="✅ Copiado");}
+function wa(){window.open("https://wa.me/?text="+encodeURIComponent(texto()));}
+c.onchange=a.onchange=pintar;pintar();
+</script><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js");</script></body></html>
